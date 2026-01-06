@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyTicket International - Xalqaro Aerochiptalar</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- 3D Globe Container -->
+    <div id="globe-container"></div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="plane-icon">✈️</div>
+        <p>Samolyot parvozga tayyorlanmoqda...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <h1>✈️ SkyTicket <span>International</span></h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="active">Bosh sahifa</a></li>
+                    <li><a href="#search">Reys qidirish</a></li>
+                    <li><a href="#flights">Reyslar</a></li>
+                    <li><a href="#booking">Chipta sotib olish</a></li>
+                    <li><a href="#mytickets">Mening chiptalarim</a></li>
+                    <li><a href="#admin" id="adminLink">Admin panel</a></li>
+                </ul>
+                <div class="nav-right">
+                    <button class="btn btn-secondary" id="themeToggle">🌙</button>
+                    <button class="btn btn-primary" id="loginBtn">Kirish</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title">Dunyo bo'ylab parvoz qiling!</h2>
+                    <p class="hero-subtitle">200+ davlat, 1000+ shahar, eng arzon narxlar</p>
+                    <div class="search-box" id="search">
+                        <div class="search-row">
+                            <div class="search-group">
+                                <label>Qayerdan</label>
+                                <select id="fromCountry">
+                                    <option value="">Davlat tanlang</option>
+                                    <option value="Uzbekistan">O'zbekiston</option>
+                                    <option value="USA">AQSh</option>
+                                    <option value="Russia">Rossiya</option>
+                                    <option value="Turkey">Turkiya</option>
+                                    <option value="Germany">Germaniya</option>
+                                    <option value="UAE">BAA</option>
+                                </select>
+                            </div>
+                            <div class="search-group">
+                                <label>Qayerga</label>
+                                <select id="toCountry">
+                                    <option value="">Davlat tanlang</option>
+                                    <option value="Turkey">Turkiya</option>
+                                    <option value="USA">AQSh</option>
+                                    <option value="Russia">Rossiya</option>
+                                    <option value="Germany">Germaniya</option>
+                                    <option value="UAE">BAA</option>
+                                    <option value="UK">Buyuk Britaniya</option>
+                                </select>
+                            </div>
+                            <div class="search-group">
+                                <label>Sana</label>
+                                <input type="date" id="flightDate">
+                            </div>
+                            <div class="search-group">
+                                <label>Yo'lovchilar</label>
+                                <input type="number" id="passengers" min="1" max="10" value="1">
+                            </div>
+                            <button class="btn btn-primary btn-search" id="searchBtn">
+                                🔍 Reys qidirish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flights Section -->
+        <section class="flights-section" id="flights">
+            <div class="container">
+                <h2 class="section-title">Mavjud Xalqaro Reyslar</h2>
+                <div class="flights-grid" id="flightsGrid">
+                    <!-- Flight cards will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section -->
+        <section class="booking-section" id="booking">
+            <div class="container">
+                <h2 class="section-title">Chipta Sotib Olish</h2>
+                <div class="booking-form">
+                    <div class="form-row">
+                        <input type="text" id="passengerName" placeholder="To'liq ism" required>
+                        <input type="text" id="passportNumber" placeholder="Pasport raqami" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" id="email" placeholder="Email" required>
+                        <input type="tel" id="phone" placeholder="Telefon raqami" required>
+                    </div>
+                    <div class="form-row">
+                        <select id="selectFlight" required>
+                            <option value="">Reysni tanlang</option>
+                        </select>
+                        <input type="number" id="seatNumber" placeholder="O'rindiq raqami" min="1" max="999">
+                    </div>
+                    <button class="btn btn-primary btn-booking" id="bookBtn">
+                        💳 Chipta sotib olish
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Tickets Section -->
+        <section class="tickets-section" id="mytickets">
+            <div class="container">
+                <h2 class="section-title">Mening Chiptalarim</h2>
+                <div class="tickets-list" id="ticketsList">
+                    <!-- Tickets will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Panel (Hidden by default) -->
+        <section class="admin-section" id="admin" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">Admin Panel</h2>
+                <div class="admin-panel">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" data-tab="add-flight">Yangi reys qo'shish</button>
+                        <button class="admin-tab" data-tab="view-tickets">Sotilgan chiptalar</button>
+                        <button class="admin-tab" data-tab="statistics">Statistika</button>
+                    </div>
+                    
+                    <div class="admin-content">
+                        <!-- Add Flight Form -->
+                        <div class="tab-content active" id="add-flight">
+                            <h3>Yangi Xalqaro Reys</h3>
+                            <div class="form-grid">
+                                <input type="text" id="newFromCountry" placeholder="Davlatdan">
+                                <input type="text" id="newFromCity" placeholder="Shahardan">
+                                <input type="text" id="newToCountry" placeholder="Davlatga">
+                                <input type="text" id="newToCity" placeholder="Shaharga">
+                                <input type="text" id="newFlightNumber" placeholder="Reys raqami">
+                                <input type="text" id="newAirline" placeholder="Aviakompaniya">
+                                <input type="datetime-local" id="newDeparture">
+                                <input type="datetime-local" id="newArrival">
+                                <input type="number" id="newPrice" placeholder="Narxi ($)">
+                                <input type="number" id="newSeats" placeholder="O'rindiqlar soni">
+                            </div>
+                            <button class="btn btn-primary" id="addFlightBtn">➕ Reys qo'shish</button>
+                        </div>
+
+                        <!-- View Tickets -->
+                        <div class="tab-content" id="view-tickets">
+                            <h3>Sotilgan Chiptalar</h3>
+                            <div class="sold-tickets" id="soldTickets">
+                                <!-- Sold tickets will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Statistics -->
+                        <div class="tab-content" id="statistics">
+                            <h3>Statistika</h3>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <h4>Bugungi sotuv</h4>
+                                    <p class="stat-number" id="todaySales">24</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4>Oylik daromad</h4>
+                                    <p class="stat-number" id="monthlyRevenue">$12,450</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4>Faol reyslar</h4>
+                                    <p class="stat-number" id="activeFlights">156</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4>Bo'sh o'rindiqlar</h4>
+                                    <p class="stat-number" id="availableSeats">842</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>✈️ SkyTicket International</h3>
+                    <p>Xalqaro aerochiptalar onlayn platformasi</p>
+                    <p>© 2026 Jahongir. Barcha huquqlar himoyalangan.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Aloqa</h4>
+                    <p>📧 info@skyticket.uz</p>
+                    <p>📞 +998 90 123 45 67</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/three-scene.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/booking.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
